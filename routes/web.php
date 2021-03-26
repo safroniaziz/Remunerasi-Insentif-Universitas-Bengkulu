@@ -24,6 +24,26 @@ Auth::routes();
 
 Route::group(['prefix'  => 'admin'], function () {
     Route::get('/dashboard', 'Admin\DashboardController@dashboard')->name('admin.dashboard');
+
+    Route::group(['prefix'  => 'manajemen_periode'], function () {
+        Route::get('/', 'Admin\PeriodeController@index')->name('admin.periode');
+        Route::get('/tambah_periode', 'Admin\PeriodeController@add')->name('admin.periode.add');
+        Route::post('/tambah_periode', 'Admin\PeriodeController@post')->name('admin.periode.post');
+        Route::get('/ubah_periode/{id}', 'Admin\PeriodeController@edit')->name('admin.periode.edit');
+        Route::patch('/update/{id}', 'Admin\PeriodeController@update')->name('admin.periode.update');
+        Route::delete('/delete', 'Admin\PeriodeController@delete')->name('admin.periode.delete');
+        Route::patch('/aktifkan_status/{id}', 'Admin\PeriodeController@aktifkanStatus')->name('admin.periode.aktifkan_status');
+        Route::patch('/non_aktifkan_status/{id}', 'Admin\PeriodeController@nonAktifkanStatus')->name('admin.periode.non_aktifkan_status');
+    });
+
+    Route::group(['prefix'  => 'manajemen_rubrik'], function () {
+        Route::get('/', 'Admin\RubrikController@index')->name('admin.rubrik');
+        Route::get('/tambah_rubrik', 'Admin\RubrikController@add')->name('admin.rubrik.add');
+        Route::post('/tambah_rubrik', 'Admin\RubrikController@post')->name('admin.rubrik.post');
+        Route::get('/ubah_rubrik/{id}', 'Admin\RubrikController@edit')->name('admin.rubrik.edit');
+        Route::patch('/update/{id}', 'Admin\RubrikController@update')->name('admin.rubrik.update');
+        Route::delete('/delete', 'Admin\RubrikController@delete')->name('admin.rubrik.delete');
+    });
 });
 
 Route::group(['prefix'  => 'operator'], function () {

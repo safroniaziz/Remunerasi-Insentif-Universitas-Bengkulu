@@ -16,16 +16,16 @@ class CreateRubriksTable extends Migration
         Schema::create('rubriks', function (Blueprint $table) {
             $table->id();
             $table->string('nama_rubrik');
-            $table->string('nama_kolom_1');
-            $table->string('nama_kolom_2');
-            $table->string('nama_kolom_3');
-            $table->string('nama_kolom_4');
-            $table->integer('nama_kolom_5');
-            $table->integer('nama_kolom_6');
-            $table->integer('nama_kolom_7');
-            $table->integer('nama_kolom_8');
-            $table->date('nama_kolom_9');
-            $table->date('nama_kolom_10');
+            $table->string('nama_kolom_1')->nullable();
+            $table->string('nama_kolom_2')->nullable();
+            $table->string('nama_kolom_3')->nullable();
+            $table->string('nama_kolom_4')->nullable();
+            $table->integer('nama_kolom_5')->nullable();
+            $table->integer('nama_kolom_6')->nullable();
+            $table->integer('nama_kolom_7')->nullable();
+            $table->integer('nama_kolom_8')->nullable();
+            $table->date('nama_kolom_9')->nullable();
+            $table->date('nama_kolom_10')->nullable();
             $table->timestamps();
         });
     }

@@ -2,24 +2,21 @@
     <a href=" {{ route('admin.dashboard') }} "><i class="fa fa-home"></i>Dashboard</a>
 </li>
 
-{{-- <li><a><i class="fa fa-building-o"></i>Divisi Universitas <span class="fa fa-chevron-down"></span></a>
-    <ul class="nav child_menu">
-        <li><a href=" {{ route('operator.fakultas') }} ">Fakultas</a></li>
-        <li><a href=" {{ route('operator.prodi') }} ">Program Study</a></li>
-    </ul>
-</li> --}}
+<li>
+    <a href=" {{ route('admin.periode') }} "><i class="fa fa-calendar"></i>Manajemen Periode</a>
+</li>
 
-{{-- <li>
-    <a href=" {{ route('operator.skim') }} "><i class="fa fa-info-circle"></i>Skim Penelitian</a>
-</li> --}}
+<li>
+    <a href=" {{ route('admin.rubrik') }} "><i class="fa fa-file"></i>Manajemen Rubrik</a>
+</li>
 
-<li><a><i class="fa fa-check-square"></i>Contoh Dropdown Menu <span class="fa fa-chevron-down"></span></a>
+{{-- <li><a><i class="fa fa-check-square"></i>Contoh Dropdown Menu <span class="fa fa-chevron-down"></span></a>
     <ul class="nav child_menu">
         <li><a href="  ">Menu 1</a></li>
         <li><a href="  ">Menu 2</a></li>
         <li><a href="  ">Menu 3</a></li>
     </ul>
-</li>
+</li> --}}
 
 <li style="padding-left:2px;">
     <a class="dropdown-item" href="{{ route('logout') }}"
