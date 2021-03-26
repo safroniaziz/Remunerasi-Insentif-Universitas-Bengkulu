@@ -31,4 +31,5 @@ Route::group(['prefix'  => 'operator'], function () {
 });
 
 Route::group(['prefix'  => 'verifikator'], function () {
-    Route::get('/dashboard', 'Verifikator\DashboardController@dashboard'
+    Route::get('/dashboard', 'Verifikator\DashboardController@dashboard')->name('verifikator.dashboard');
+});
