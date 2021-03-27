@@ -48,6 +48,19 @@ Route::group(['prefix'  => 'admin'], function () {
 
 Route::group(['prefix'  => 'operator'], function () {
     Route::get('/dashboard', 'Operator\DashboardController@dashboard')->name('operator.dashboard');
+    Route::group(['prefix'=>'data_remunisasi'],function(){
+        route::get('/','operator\DataRemunController@index')->name('operator.dataremun');
+        route::post('/store','operator\DataRemunController@store')->name('operator.dataremun.store');
+        route::put('/status/{id}','operator\DataRemunController@status')->name('operator.dataremun.status');
+        route::put('/tambah_isian/{id}','operator\DataRemunController@tambah_isian')->name('operator.dataremun.tambah_isian');
+        route::delete('/{id}/delete','operator\DataRemunController@destroy')->name('operator.dataremun.destroy');
+    });
+
+    Route::group(['prefix'=>'detail_rubrik'],function(){
+        route::get('/{id}/','operator\DetailRubrikController@index')->name('operator.detailrubrik');
+        route::post('/{id}/store','operator\DetailRubrikController@store')->name('operator.detailrubrik.store');
+        route::delete('/{id_rubrik}/destroy','operator\DetailRubrikController@destroy')->name('operator.detailrubrik.destroy');
+    });
 });
 
 Route::group(['prefix'  => 'verifikator'], function () {

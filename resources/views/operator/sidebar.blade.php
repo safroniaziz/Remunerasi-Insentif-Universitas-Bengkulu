@@ -1,5 +1,8 @@
 <li>
-    <a href=" {{ route('admin.dashboard') }} "><i class="fa fa-home"></i>Dashboard</a>
+    <a href=" {{ route('operator.dashboard') }} "><i class="fa fa-home"></i>Dashboard</a>
+</li>
+<li>
+    <a href=" {{ route('operator.dataremun') }} "><i class="fa fa-book"></i>Data Remunisasi</a>
 </li>
 
 <li style="padding-left:2px;">
