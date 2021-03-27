@@ -103,13 +103,13 @@
                    <table class="table table-hover table-bordered" id="table">
                        <thead>
                            <tr>
-                               <th>No</th>
+                               <th width="4%">No</th>
                                <th class="text-center">Nama Rubrik</th>
                                <th class="text-center">Nomor SK</th>
                                <th class="text-center">Isian</th>
                                <th class="text-center">File</th>
                                <th class="text-center">Periode</th>
-                               <th class="text-center">Detail Rubrik</th>
+                               <th class="text-center" width="5%">Detail Rubrik</th>
                                <th class="text-center">Status</th>
                                <th class="text-center">Ubah Status</th>
                                <th class="text-center">Aksi</th>
@@ -127,7 +127,7 @@
                                     <td class="text-center">
                                         {{ $isian_rubrik->isian_1 }}
                                         <hr>
-                                        <button type="button" id="modal_isi" class="btn btn-primary btn-sm" @if ($isian_rubrik->status_validasi=='aktif') disabled @endif data-toggle="modal" data-id="{{ $isian_rubrik->id }}" class="btn btn-primary btn-sm text-center"><i class="fa fa-plus-circle"></i>&nbsp; Tambah isian</button>
+                                        <button type="button" id="modal_isi" class="btn btn-primary btn-sm" @if ($isian_rubrik->status_validasi=='aktif') disabled @endif data-toggle="modal" data-id="{{ $isian_rubrik->id }}" class="btn btn-primary btn-sm text-center"><i class="fa fa-plus-circle"></i>&nbsp; Tambah</button>
                                     </td>
                                     <td class="text-center"><a href="{{ asset('upload/file_remun/'.$isian_rubrik->file_upload) }}" download="data" class="btn btn-primary"><i class="fa fa-download"></i></a></td>
                                     <td>{{ $isian_rubrik->periode_id }}</td>
@@ -138,7 +138,7 @@
                                         @if ($isian_rubrik->status_validasi=='nonaktif')
                                             <h6><span class="badge badge-danger"><i class="fa fa-close"></i> &nbsp; belum Dikirim</span></h6>
                                         @else
-                                            <h6><span class="badge badge-secondary"><i class="fa fa-clock-o"></i> &nbsp; Menunggu Verifikasi</span></h6>
+                                            <h6><span class="badge badge-info"><i class="fa fa-clock-o"></i> &nbsp; Menunggu Verifikasi</span></h6>
                                         @endif
                                     </td>
                                     <td class="text-center">
@@ -154,8 +154,8 @@
                                     </td>
                                     <td class="text-center">
                                         <form action="{{ route('operator.dataremun.destroy',$isian_rubrik->id) }}" method="POST">
-                                            @csrf @method('delete')
                                             <a href="#" @if ($isian_rubrik->status_validasi=='aktif') disabled @endif class="btn btn-warning btn-sm"><i class="fa fa-pencil-square-o"></i></a>
+                                            @csrf @method('delete')
                                             <button type="submit" class="btn btn-danger btn-sm" @if ($isian_rubrik->status_validasi=='aktif') disabled @endif><i class="fa fa-trash"></i></button>
                                         </form>
                                     </td>

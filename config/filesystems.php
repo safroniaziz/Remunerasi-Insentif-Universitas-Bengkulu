@@ -48,11 +48,6 @@ return [
             'root' => storage_path('app'),
         ],
 
-        'folder_public' => [
-            'driver' => 'local',
-            'root'   => public_path() . '/upload/file_remun',
-        ],
-
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
