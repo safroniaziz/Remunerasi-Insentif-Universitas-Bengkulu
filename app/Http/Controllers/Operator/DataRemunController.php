@@ -10,20 +10,25 @@ use App\IsianRubrik;
 use App\Periode;
 use App\Unit;
 
+use function GuzzleHttp\json_encode;
+
 class DataRemunController extends Controller
 {
     public function index(){
-        $data['rubriks']=Rubrik::all();
-        $data['isian_rubriks']=IsianRubrik::all();
-        $data['periodes']=Periode::all();
+        $data['data_rubriks']=Rubrik::all();
+        $data['rubriks']=Rubrik::has('isianrubrik')->get();
+        $data['periodes']=Periode::where('status','aktif')->get();
         $data['units']=Unit::all();
         return view('operator.data_remun.dataremun',$data);
+
     }
     public function store(Request $request){
         $this->validate($request,[
             'id_rubrik'   =>  'required',
             'no_sk'   =>  'required',
             'id_periode'   =>  'required',
+        ],[
+            'required' => 'Data tidak boleh kosong'
         ]);
         $nama_file=null;
         if ($request->hasFile('file_isian')){
@@ -36,13 +41,16 @@ class DataRemunController extends Controller
                 ->sortBy('timestamp')
                 ->last();
         }
-        IsianRubrik::create([
-            'pengguna_rubrik_id'       =>  $request->id_rubrik,
+        $isian_kolom=array_combine($request->isian_angka,$request->nama_kolom);
+        $isian_rubrik=array(
+            'rubrik_id'       =>  $request->id_rubrik,
             'nomor_sk'       =>  $request->no_sk,
             'periode_id'       =>  $request->id_periode,
             'file_upload'       =>  $file['path'],
             'status_validasi'       =>  "nonaktif",
-        ]);
+        );
+        $data=array_merge($isian_rubrik,$isian_kolom);
+        IsianRubrik::create($data);
         return redirect()->route('operator.dataremun')->with(['success' =>  'Data isian rubrik berhasil ditambahkan']);
     }
 
@@ -65,5 +73,19 @@ class DataRemunController extends Controller
         Storage::cloud()->delete($data->file_upload);
         $data->delete();
         return redirect()->route('operator.dataremun')->with(['success' =>  'Data berhasil dihapus']);
+    }
+
+    public function download($fileid){
+        $file = collect(Storage::cloud()->listContents('', false))
+                ->where('type', '=', 'file')
+                ->where('path', '=', pathinfo($fileid, PATHINFO_FILENAME))
+                ->last();
+        $response=Storage::cloud()->download($fileid,$file['name']);
+        $response->send();
+    }
+
+    public function kolom_rubrik(Request $request){
+        $data=Rubrik::find($request->id);
+        return response()->json($data, 200);
     }
 }

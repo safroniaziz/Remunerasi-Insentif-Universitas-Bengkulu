@@ -9,4 +9,9 @@ class Periode extends Model
     protected $fillable = [
         'masa_kinerja','periode_pembayaran','status'
     ];
+
+    public function isianrubrik()
+    {
+        return $this->hasOne('App\IsianRubrik');
+    }
 }

@@ -45,14 +45,14 @@
 
                     <div class="col-md-6">
                         <label>NIP</label>
-                        <select name="nip" id="nip" class="form-control">
+                        <select name="nip" id="nip" class="form-control @error('nip') is-invalid @enderror">
                             <option value="">-- Pilih nama  --</option>
                             <option value="1">contoh nama</option>
                         </select>
                         @error('nip')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
                         @enderror
                     </div>
                     <div class="col-md-6">
@@ -61,17 +61,22 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1">Rp.</span>
                             </div>
-                            <input type="text" name="rate_remun" id="rate_remun" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');" aria-describedby="basic-addon1" class="form-control @error('rate_remun') is-invalid @enderror">
+                            <input type="text" name="rate_remun" id="rate_remun" oninput="this.value = this.value.replace(/[^0-9]/g, '');" aria-describedby="basic-addon1" class="form-control @error('rate_remun') is-invalid @enderror">
                             @error('rate_remun')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
                             @enderror
                         </div>
                     </div>
                     <div class="col-md-12 mt-2">
                         <label>Keterangan</label>
-                        <textarea name="keterangan" class="form-control" id="keterangan" cols="5" rows="5"></textarea>
+                        <textarea name="keterangan" class="form-control @error('keterangan') is-invalid @enderror" id="keterangan" cols="5" rows="5"></textarea>
+                        @error('keterangan')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
                     </div>
                     <div class="col-md-12 text-center mt-3">
                         <button type="reset" name="reset" class="btn btn-warning btn-sm"><i class="fa fa-refresh"></i>&nbsp; Ulangi</button>
@@ -84,22 +89,22 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="col-md-6">
-                        <p>Nama Rubrik  : {{ $isian_rubrik->pengguna_rubrik_id }}</p>
+                        <p><b> Nama Rubrik  : {{ $isian_rubrik->rubrik->nama_rubrik }} </b></p>
                     </div>
                     <div class="col-md-6">
-                        <p>Nomor SK  : {{ $isian_rubrik->nomor_sk }}</p>
+                        <p><b> Nomor SK  : {{ $isian_rubrik->nomor_sk }} </b></p>
                     </div>
                     <div class="col-md-6 mt-2">
-                        <p>Periode  : {{ $isian_rubrik->periode_id }}</p>
+                        <p><b> Periode  : {{ $isian_rubrik->periode->masa_kinerja }} </b></p>
                     </div>
                     <div class="col-md-6 mt-2">
-                        <p>Isian Rubrik  : {{ $isian_rubrik->isian_1 }}</p>
+                        <p><b> Isian Rubrik  : {{ $isian_rubrik->isian_1 }} </b></p>
                     </div>
                 </div>
             </div>
             <hr>
            <div class="row">
-               <div class="col-md-12">
+               <div class="col-md-6">
                    <table class="table table-hover table-bordered" id="table">
                        <thead>
                            <tr>
@@ -107,7 +112,7 @@
                                <th class="text-center">NIP</th>
                                <th class="text-center">Rate Remun</th>
                                <th class="text-center">Keterangan</th>
-                               @if ($isian_rubrik->status_validasi!='aktif')
+                               @if ($isian_rubrik->status_validasi=='nonaktif')
                                     <th class="text-center">Aksi</th>
                                @endif
                            </tr>
@@ -116,24 +121,46 @@
                            @php
                                $no=1;
                            @endphp
-                           @foreach ($detail_rubriks as $detail_rubrik)
+                           @foreach ($isian_rubrik->detailisianrubrik as $detail_rubrik)
                                 <tr>
                                     <td >{{ $no++."." }}</td>
                                     <td>{{ $detail_rubrik->nip }}</td>
-                                    <td>Rp.{{ $detail_rubrik->rate_remun }}</td>
+                                    <td>Rp {{ number_format($detail_rubrik->rate_remun,0,',','.') }}</td>
                                     <td>{!! $detail_rubrik->keterangan !!}</td>
-                                    @if ($isian_rubrik->status_validasi!='aktif')
+                                    @if ($isian_rubrik->status_validasi=='nonaktif')
                                         <td class="text-center">
-                                            <form action="{{ route('operator.detailrubrik.destroy',$isian_rubrik->id) }}" method="POST">
+                                            <form action="{{ route('operator.detailrubrik.destroy',$isian_rubrik->id) }}" id="hapus_form" method="POST">
                                                 @csrf @method('delete')
                                                 <a href="#" class="btn btn-warning btn-sm"><i class="fa fa-pencil-square-o"></i></a>
                                                 <input type="hidden" name="id_detail_rubrik" value="{{ $detail_rubrik->id }}">
-                                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
+                                                <button type="submit" class="btn btn-danger btn-sm" id="hapus_data"><i class="fa fa-trash"></i></button>
                                             </form>
                                         </td>
                                     @endif
                                 </tr>
                            @endforeach
+                       </tbody>
+                   </table>
+               </div>
+               <div class="col-md-6">
+                   <table class="table table-hover table-bordered" id="table">
+                       <thead>
+                           <tr>
+                               @foreach ($rubriks as $key => $item)
+                                    @if ($item && str_contains($key,'nama_kolom'))
+                                        <th class="text-center" width="4%">{{ $item }}</th>
+                                    @endif
+                               @endforeach
+                           </tr>
+                       </thead>
+                       <tbody>
+                                <tr>
+                                    @foreach ($isian as $key => $data)
+                                        @if ($data && str_contains($key,'isian'))
+                                            <th class="text-center">{{ $data }}</th>
+                                        @endif
+                                    @endforeach
+                                </tr>
                        </tbody>
                    </table>
                </div>
@@ -147,11 +174,42 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
+            //data table
             $("table[id^='table']").DataTable({
                 responsive : true,
                 "ordering": true,
             });
+
+            $('#hapus_data').click(function (e) {
+                e.preventDefault();
+                const swalWithBootstrapButtons = Swal.mixin({
+                    customClass: {
+                        confirmButton: 'btn btn-primary',
+                        cancelButton: 'btn btn-danger'
+                    },
+                    buttonsStyling: false
+                })
+
+                swalWithBootstrapButtons.fire({
+                    title: 'Apakah anda yakin?',
+                    text: "Data yang sudah dihapus tidak dapat dikembalikan",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, saya yakin!',
+                    cancelButtonText: 'Tidak, Batalkan!',
+                    reverseButtons: true
+                    }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#hapus_form').submit();
+                    } else if (
+                        /* Read more about handling dismissals below */
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                    }
+                })
+            });
         } );
+
     </script>
 
 @endpush

@@ -10,7 +10,9 @@ use App\IsianRubrik;
 class DetailRubrikController extends Controller
 {
     public function index($id){
+        $data['isian']=collect(IsianRubrik::findorfail($id))->toArray();
         $data['isian_rubrik']=IsianRubrik::findorfail($id);
+        $data['rubriks']=collect($data['isian_rubrik']->rubrik)->toArray();
         $data['detail_rubriks']=DetailIsianRubrik::where('isian_rubrik_id',$id)->get();
         return view('operator.data_remun.detailrubrik',$data);
     }

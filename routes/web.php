@@ -50,6 +50,8 @@ Route::group(['prefix'  => 'operator'], function () {
     Route::get('/dashboard', 'Operator\DashboardController@dashboard')->name('operator.dashboard');
     Route::group(['prefix'=>'data_remunisasi'],function(){
         route::get('/','operator\DataRemunController@index')->name('operator.dataremun');
+        route::get('/{id}/kolum_rubrik','operator\DataRemunController@kolom_rubrik')->name('operator.dataremun.kolom_rubrik');
+        route::get('/{fileid}/download','operator\DataRemunController@download')->name('operator.dataremun.download');
         route::post('/store','operator\DataRemunController@store')->name('operator.dataremun.store');
         route::put('/status/{id}','operator\DataRemunController@status')->name('operator.dataremun.status');
         route::put('/tambah_isian/{id}','operator\DataRemunController@tambah_isian')->name('operator.dataremun.tambah_isian');
@@ -65,4 +67,11 @@ Route::group(['prefix'  => 'operator'], function () {
 
 Route::group(['prefix'  => 'verifikator'], function () {
     Route::get('/dashboard', 'Verifikator\DashboardController@dashboard')->name('verifikator.dashboard');
+    Route::group(['prefix'=>'data_remunisasi'],function(){
+        route::get('/','Verifikator\VerifDataRemunController@index')->name('verifikator.dataremun');
+        route::put('/{id}/verifikasi','Verifikator\VerifDataRemunController@verifikasi')->name('verifikator.dataremun.verifikasi');
+    });
+    Route::group(['prefix'=>'detail_rubrik'],function(){
+        route::get('/{id}/','verifikator\VerifDetailRubrikController@index')->name('verifikator.detailrubrik');
+    });
 });
