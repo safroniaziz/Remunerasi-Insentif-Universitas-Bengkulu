@@ -50,12 +50,19 @@ Route::group(['prefix'  => 'operator'], function () {
     Route::get('/dashboard', 'Operator\DashboardController@dashboard')->name('operator.dashboard');
     Route::group(['prefix'=>'data_remunisasi'],function(){
         route::get('/','operator\DataRemunController@index')->name('operator.dataremun');
-        route::get('/{id}/kolum_rubrik','operator\DataRemunController@kolom_rubrik')->name('operator.dataremun.kolom_rubrik');
+        route::get('/kolum_rubrik','operator\DataRemunController@kolom_rubrik')->name('operator.dataremun.kolom_rubrik');
         route::get('/{fileid}/download','operator\DataRemunController@download')->name('operator.dataremun.download');
+        route::get('/{id}/edit','operator\DataRemunController@edit')->name('operator.dataremun.edit');
         route::post('/store','operator\DataRemunController@store')->name('operator.dataremun.store');
+        route::post('/upload_file','operator\DataRemunController@upload')->name('operator.dataremun.upload');
+        route::put('/{id}}/update','operator\DataRemunController@update')->name('operator.dataremun.update');
         route::put('/status/{id}','operator\DataRemunController@status')->name('operator.dataremun.status');
         route::put('/tambah_isian/{id}','operator\DataRemunController@tambah_isian')->name('operator.dataremun.tambah_isian');
         route::delete('/{id}/delete','operator\DataRemunController@destroy')->name('operator.dataremun.destroy');
+        route::delete('/hapus_file','operator\DataRemunController@hapus_file')->name('operator.dataremun.hapus_file');
+    });
+    Route::prefix('rekap_data')->group(function () {
+        route::get('/','operator\RekapController@index')->name('operator.rekapdata');
     });
 
     Route::group(['prefix'=>'detail_rubrik'],function(){

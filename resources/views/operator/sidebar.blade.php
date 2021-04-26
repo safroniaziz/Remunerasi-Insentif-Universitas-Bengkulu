@@ -4,6 +4,9 @@
 <li >
     <a href=" {{ route('operator.dataremun') }} "><i class="fa fa-book"></i>Data Remunisasi</a>
 </li>
+<li >
+    <a href=" {{ route('operator.rekapdata') }} "><i class="fa fa-print"></i>Rekap Data</a>
+</li>
 
 <li style="padding-left:2px;">
     <a class="dropdown-item" href="{{ route('logout') }}"

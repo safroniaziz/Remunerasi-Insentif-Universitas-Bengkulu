@@ -19,6 +19,7 @@ class CreatePenggunaRubriksTable extends Migration
             $table->unsignedBigInteger('rubrik_id')->constrained('rubriks');
             $table->enum('status',['aktif','nonaktif']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

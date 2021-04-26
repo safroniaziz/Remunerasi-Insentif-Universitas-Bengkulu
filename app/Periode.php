@@ -14,4 +14,7 @@ class Periode extends Model
     {
         return $this->hasOne('App\IsianRubrik');
     }
+    public function rekapitulasi(){
+        return $this->hasMany('App\Rekapitulasi');
+    }
 }

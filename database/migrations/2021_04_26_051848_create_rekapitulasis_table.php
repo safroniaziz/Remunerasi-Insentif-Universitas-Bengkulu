@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDetailIsianRubriksTable extends Migration
+class CreateRekapitulasisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateDetailIsianRubriksTable extends Migration
      */
     public function up()
     {
-        Schema::create('detail_isian_rubriks', function (Blueprint $table) {
+        Schema::create('rekapitulasis', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('isian_rubrik_id')->constrained('isian_rubriks');
+            $table->unsignedBigInteger('periode_id')->constrained('periodes');
             $table->string('nip');
-            $table->string('keterangan');
-            $table->integer('rate_remun');
+            $table->integer('total_remun');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -31,6 +29,6 @@ class CreateDetailIsianRubriksTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detail_isian_rubriks');
+        Schema::dropIfExists('rekapitulasis');
     }
 }

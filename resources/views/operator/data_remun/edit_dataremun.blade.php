@@ -87,7 +87,7 @@
                         <select name="id_rubrik" id="id_rubrik" class="form-control @error('id_rubrik') is-invalid @enderror">
                             <option value="">-- Pilih nama rubrik --</option>
                             @foreach ($data_rubriks as $rubrik)
-                                <option value="{{$rubrik->id}}" {{ $rubrik->id==old('id_rubrik')? 'selected':'' }} >{{ $rubrik->nama_rubrik }}</option>
+                                <option value="{{$rubrik->id}}" {{ $rubrik->id==$data->rubrik_id ? 'selected':'' }} >{{ $rubrik->nama_rubrik }}</option>
                             @endforeach
                         </select>
                         @error('id_rubrik')
@@ -98,7 +98,7 @@
                     </div>
                     <div class="col-md-6">
                         <label for="no_sk">Nomor SK</label>
-                        <input type="text" name="no_sk" id="no_sk"  class="form-control @error('no_sk') is-invalid @enderror" value="{{ old('no_sk') }}">
+                        <input type="text" name="no_sk" id="no_sk"  class="form-control @error('no_sk') is-invalid @enderror" value="{{ $data->nomor_sk }}">
                         @error('no_sk')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -110,7 +110,7 @@
                         <select name="id_periode" id="id_periode" class="form-control @error('id_periode') is-invalid @enderror">
                             <option value="">-- Pilih masa kinerja --</option>
                             @foreach ($periodes as $periode)
-                                <option value="{{$periode->id}}" {{ $periode->id==old('id_periode')?'selected':'' }} >{{ $periode->masa_kinerja }}</option>
+                                <option value="{{$periode->id}}" {{ $periode->id==$data->periode_id ?'selected':'' }} >{{ $periode->masa_kinerja }}</option>
                             @endforeach
                         </select>
                         @error('id_periode')
@@ -167,71 +167,6 @@
                     </div>
                 </div>
             </form>
-           <div class="row">
-               <div class="col-md-12">
-                   <table class="table table-hover table-bordered" id="table">
-                       <thead>
-                           <tr>
-                               <th width="4%">no</th>
-                               <th class="text-center">Nama Rubrik</th>
-                               <th class="text-center">Nomor SK</th>
-                               <th class="text-center">unit</th>
-                               <th class="text-center">File</th>
-                               <th class="text-center">Periode</th>
-                               <th class="text-center">Status</th>
-                               <th class="text-center">Ubah Status</th>
-                               <th class="text-center">Aksi</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           @php
-                               $no=1;
-                           @endphp
-                           @foreach ($rubriks as $rubrik)
-                                @foreach ($rubrik->isianrubrik as $isian_rubrik)
-                                        <tr>
-                                            <td>{{ $no++ }}</td>
-                                            <td>{{ $isian_rubrik->rubrik->nama_rubrik }}</td>
-                                            <td>{{ $isian_rubrik->nomor_sk }}</td>
-                                            <td class="text-center">{{ $isian_rubrik->nm_unit }}</td>
-                                            <td class="text-center"><a href="{{ route('operator.dataremun.download',$isian_rubrik->file_upload) }}"  class="btn btn-primary"><i class="fa fa-download"></i></a></td>
-                                            <td>{{ $isian_rubrik->periode->masa_kinerja }}</td>
-                                            <td class="text-center">
-                                                @if ($isian_rubrik->status_validasi=='nonaktif')
-                                                    <h6><span class="badge badge-warning"><i class="fa fa-exclamation-circle"></i> &nbsp; Belum dikirim</span></h6>
-                                                @elseif ($isian_rubrik->status_validasi=='aktif')
-                                                    <h6><span class="badge badge-info"><i class="fa fa-clock-o"></i> &nbsp; Menunggu Verifikasi</span></h6>
-                                                @elseif($isian_rubrik->status_validasi=="terverifikasi")
-                                                    <h6><span class="badge badge-success"><i class="fa fa-check"></i> &nbsp; Terverifikasi</span></h6>
-                                                @else
-                                                    <h6><span class="badge badge-danger"><i class="fa fa-check"></i> &nbsp; Terverifikasi</span></h6>
-                                                @endif
-                                            </td>
-                                            <td class="text-center">
-                                                @if ($isian_rubrik->status_validasi=='nonaktif')
-                                                    <form action="{{ route('operator.dataremun.status',$isian_rubrik->id) }}" class="selesai_form" method="POST">
-                                                        @csrf @method('PUT')
-                                                        <button type="submit" class="btn btn-success btn-sm data_selesai" data-detail="{{ $isian_rubrik->detailisianrubrik->count() }}"><i class="fa fa-check"></i>&nbsp; Selesai</button>
-                                                    </form>
-                                                @else
-                                                    <h6><span class="badge badge-success"><i class="fa fa-check-circle-o"></i></span></h6>
-                                                @endif
-                                            </td>
-                                            <td class="text-center">
-                                                <form action="{{ route('operator.dataremun.destroy',$isian_rubrik->id) }}" class="hapus_form" method="POST">
-                                                    <a href="{{ route('operator.detailrubrik',$isian_rubrik->id) }}"  class="btn btn-primary btn-sm text-center"><i class="fa fa-info-circle"></i></a>
-                                                    <a href="{{ route('operator.dataremun.edit',$isian_rubrik->id) }}" class="btn btn-warning btn-sm @if ($isian_rubrik->status_validasi!='nonaktif') disabled @endif"><i class="fa fa-pencil-square-o"></i></a>
-                                                    @csrf @method('delete')
-                                                    <button type="submit" class="btn btn-danger btn-sm hapus_data"  @if ($isian_rubrik->status_validasi!='nonaktif') disabled @endif><i class="fa fa-trash"></i></button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                @endforeach
-                           @endforeach
-                       </tbody>
-                   </table>
-               </div>
-           </div>
         </div>
     </section>
 @endsection
@@ -372,7 +307,6 @@
                         return xhr;
                     },
                     success: function (response) {
-                        console.log(response);
                         progress_wrapper.addClass('d-none');
                         $('#id_file').val(response.id);
                         show_alert(response,'secondary');
@@ -383,11 +317,8 @@
                     },
                     error : function(err){
                         progress_wrapper.addClass('d-none');
-                        let pesan={
-                            'pesan' : 'gagal upload file',
-                            'isi' : JSON.parse(err.responseText).errors.file_isian,
-                        };
-                        show_alert(pesan,'danger');
+                        console.log(err);
+                        show_alert('gagal upload file','danger');
                         btn_loading.addClass('d-none');
                         simpan.removeClass('d-none');
                     }
@@ -397,18 +328,12 @@
             //show alert
             function show_alert(message, alert){
                 if(alert=='danger'){
-                    $('#alert_file').removeClass('alert-secondary');
                     $('#alert_file').addClass('alert-'+alert);
-                    let isi='';
-                    $.each(message.isi, function(index, value) {
-                        isi=isi+'- '+value+'<br>';
-                    });
-                    $('#tampil_file').html(message.pesan+"<br> kesalahan : "+isi);
+                    $('#tampil_file').html(message);
                     $('#alert_file').removeClass('d-none');
                 }
                 else{
                     var SITEURL = "{{URL('/operator/data_remunisasi')}}";
-                    $('#alert_file').removeClass('alert-danger');
                     $('#alert_file').addClass('alert-'+alert);
                     $('#tampil_file').html(`<a href="${SITEURL+"/"+message.id+"/download"}"  class="alert-link"><i class="fa fa-file"></i>&nbsp${message.file_asli}</a>`);
                     $('#alert_file').removeClass('d-none');

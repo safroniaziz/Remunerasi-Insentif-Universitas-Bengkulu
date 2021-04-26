@@ -20,12 +20,12 @@ class CreateRubriksTable extends Migration
             $table->string('nama_kolom_2')->nullable();
             $table->string('nama_kolom_3')->nullable();
             $table->string('nama_kolom_4')->nullable();
-            $table->integer('nama_kolom_5')->nullable();
-            $table->integer('nama_kolom_6')->nullable();
-            $table->integer('nama_kolom_7')->nullable();
-            $table->integer('nama_kolom_8')->nullable();
-            $table->date('nama_kolom_9')->nullable();
-            $table->date('nama_kolom_10')->nullable();
+            $table->string('nama_kolom_5')->nullable();
+            $table->string('nama_kolom_6')->nullable();
+            $table->string('nama_kolom_7')->nullable();
+            $table->string('nama_kolom_8')->nullable();
+            $table->string('nama_kolom_9')->nullable();
+            $table->string('nama_kolom_10')->nullable();
             $table->timestamps();
         });
     }

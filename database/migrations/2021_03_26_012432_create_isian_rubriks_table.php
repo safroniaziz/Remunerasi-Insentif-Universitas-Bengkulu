@@ -15,22 +15,23 @@ class CreateIsianRubriksTable extends Migration
     {
         Schema::create('isian_rubriks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pengguna_rubrik_id')->constrained('pengguna_rubriks');
-            $table->unsignedBigInteger('nomor_sk')->constrained('rubriks');
+            $table->unsignedBigInteger('rubrik_id')->constrained('pengguna_rubriks');
+            $table->string('nomor_sk')->constrained('rubriks');
             $table->unsignedBigInteger('periode_id')->constrained('periodes');
-            $table->string('isian_1');
-            $table->string('isian_2');
-            $table->string('isian_3');
-            $table->string('isian_4');
-            $table->integer('isian_5');
-            $table->integer('isian_6');
-            $table->integer('isian_7');
-            $table->integer('isian_8');
-            $table->date('isian_9');
-            $table->date('isian_10');
+            $table->string('isian_1')->nullable();
+            $table->string('isian_2')->nullable();
+            $table->string('isian_3')->nullable();
+            $table->string('isian_4')->nullable();
+            $table->integer('isian_5')->nullable();
+            $table->integer('isian_6')->nullable();
+            $table->integer('isian_7')->nullable();
+            $table->integer('isian_8')->nullable();
+            $table->date('isian_9')->nullable();
+            $table->date('isian_10')->nullable();
             $table->string('file_upload');
-            $table->enum('status_validasi',['aktif','nonaktif']);
+            $table->enum('status_validasi',['aktif','nonaktif','terverifikasi','ditolak']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
